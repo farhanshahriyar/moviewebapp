@@ -1,46 +1,61 @@
 import React from 'react'
 import styled from 'styled-components';
+import app from '../firebase';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+
+const auth = getAuth(app)
 
 const Header = (props) => {
-    return (
-        <Nav>
-             <Logo>
-                <img src="/images/logo.svg" alt="Disney+" />
-                {/* here will be our official log  */}
-            </Logo>
-            <NavMenu>
-                <a href="/home">
-                    <img src="/images/home-icon.svg" alt="HOME" />
-                    <span>HOME</span>
-                </a>
-                <a>
-                    <img src="/images/search-icon.svg" alt="SEARCH" />
-                    <span>SEARCH</span>
-                </a>
-                <a>
-                    <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
-                    <span>REQUEST</span>
-                </a>
-                <a>
-                    <img src="/images/original-icon.svg" alt="ORIGINALS" />
-                    <span>ORIGINALS</span>
-                </a>
-                <a>
-                    <img src="/images/movie-icon.svg" alt="MOVIES" />
-                    <span>MOVIES</span>
-                </a>
-                <a>
-                    <img src="/images/series-icon.svg" alt="SERIES" />
-                    <span>SERIES</span>
-                </a>
-                <a>
-                    <img src="/images/series-icon.svg" alt="SERIES" />
-                    <span>FAQ</span>
-                </a>
-            </NavMenu>
-            <Login>Login</Login>
-        </Nav>
-    )
+  const provider = new GoogleAuthProvider()
+  const handleAuth = () => {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result)
+    })
+    .catch((error) => {
+      alert(error.message)
+    })
+  }
+ 
+  return (
+    <Nav>
+      <Logo>
+        <img src="/images/logo.svg" alt="Disney+" />
+        {/* here will be our official log  */}
+      </Logo>
+      <NavMenu>
+        <a href="/home">
+          <img src="/images/home-icon.svg" alt="HOME" />
+          <span>HOME</span>
+        </a>
+        <a href="/home">
+          <img src="/images/search-icon.svg" alt="SEARCH" />
+          <span>SEARCH</span>
+        </a>
+        <a href="/home">
+          <img src="/images/watchlist-icon.svg" alt="WATCHLIST" />
+          <span>REQUEST</span>
+        </a>
+        <a href="/home">
+          <img src="/images/original-icon.svg" alt="ORIGINALS" />
+          <span>ORIGINALS</span>
+        </a>
+        <a href="/home">
+          <img src="/images/movie-icon.svg" alt="MOVIES" />
+          <span>MOVIES</span>
+        </a>
+        <a href="/home">
+          <img src="/images/series-icon.svg" alt="SERIES" />
+          <span>SERIES</span>
+        </a>
+        <a href="/home">
+          <img src="/images/series-icon.svg" alt="SERIES" />
+          <span>FAQ</span>
+        </a>
+      </NavMenu>
+      <Login onClick={handleAuth}>Login</Login>
+    </Nav>
+  )
 };
 
 const Nav = styled.nav`

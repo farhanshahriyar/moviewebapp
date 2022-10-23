@@ -1,13 +1,29 @@
 import React from 'react'
 import styled from 'styled-components';
+import app from '../firebase';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
+const auth = getAuth(app)
 const Login = (props) => {
+
+  const provider = new GoogleAuthProvider()
+  const handleAuth = () => {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result)
+    })
+    .catch((error) => {
+      alert(error.message)
+    })
+  }
+ 
+
   return (
     <Container>
         <Content>
           <CTA>
             <CTALogoOne src="/images/cta-logo-one.svg"></CTALogoOne>
-            <SignUp>GET ALL YOUR MOVIES HERE</SignUp>
+            <SignUp onClick={handleAuth}>GET ALL YOUR MOVIES HERE</SignUp>
             <Description>Get endless entertainment and the shows and movies you love.</Description>
             <CTALogoTwo src="/images/cta-logo-two.png"></CTALogoTwo>
           </CTA>
