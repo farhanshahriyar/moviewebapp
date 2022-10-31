@@ -2,27 +2,61 @@ import React from 'react'
 import styled from 'styled-components';
 import app from '../firebase';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from "react-router-dom";
+import {
+  selectUserName, selectUserPhoto,
+  setUserLoginDetails
+} from '../features/userSlice';
 
-const auth = getAuth(app)
+const auth = getAuth(app) //firebase
 
 const Header = (props) => {
-  const provider = new GoogleAuthProvider()
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  const userName = useSelector(selectUserName);
+  const userPhoto = useSelector(selectUserPhoto);
+
+  const provider = new GoogleAuthProvider() //firebase
   const handleAuth = () => {
     signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log(result)
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+      .then((result) => {
+        setUser(result.user);
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
   }
- 
+
+  const setUser = (user) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+    )
+  }
+
+
   return (
     <Nav>
       <Logo>
         <img src="/images/logo.svg" alt="Disney+" />
         {/* here will be our official log  */}
       </Logo>
+
+      {
+        !userName ? (
+          <Login onClick={handleAuth}>Login</Login>
+        ) : (
+          <>
+            {/* <NavMenu>
+              <a href='/home'>
+                <img src='/images/home-icon.svg' alt='HOME'></img>
+              </a>
+            </NavMenu> */}
+
       <NavMenu>
         <a href="/home">
           <img src="/images/home-icon.svg" alt="HOME" />
@@ -53,7 +87,9 @@ const Header = (props) => {
           <span>FAQ</span>
         </a>
       </NavMenu>
-      <Login onClick={handleAuth}>Login</Login>
+      <UserImg src={userPhoto} alt={userName}/>
+      </>
+    )}
     </Nav>
   )
 };
@@ -163,5 +199,8 @@ const NavMenu = styled.div`
   }
 `;
 
+const UserImg = styled.img`
+  height:100%;
+`;
 
 export default Header;
